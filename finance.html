@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finance · neo</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="neo">
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script src="shell.js"></script>
+<script src="net.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<main id="app"></main>
+<script>
+Neo.collection({tab:'Finance',title:'Finance',noun:'transaction',fields:[
+ {k:'date',l:'Date',t:'date',def:'today',req:1},{k:'type',l:'Type',t:'select',opt:['expense','income']},
+ {k:'category',l:'Category',t:'select',from:'Categories',opt:['Other']},{k:'amount',l:'Amount',t:'number',req:1},
+ {k:'account',l:'Account',t:'select',opt:['Cash','Bank','E-wallet','Credit card']},{k:'notes',l:'Notes'}],
+ sort:(a,b)=>b.date.localeCompare(a.date),
+ group:r=>r.date.slice(0,7),
+ head:rows=>{const m=Neo.today().slice(0,7).slice(0,7),t=rows.filter(r=>r.date.slice(0,7)===m),s=y=>t.filter(r=>r.type===y).reduce((a,r)=>a+Neo.num(r.amount),0),i=s('income'),e=s('expense');return '<div class="cards"><div class="card"><span class="l">Income this month</span><span class="n" style="font-size:20px">'+Neo.money(i)+'</span></div><div class="card"><span class="l">Spent this month</span><span class="n" style="font-size:20px">'+Neo.money(e)+'</span></div><div class="card"><span class="l">Net</span><span class="n" style="font-size:20px;color:var(--'+(i-e<0?'bad':'ok')+')">'+Neo.money(i-e)+'</span></div></div>'},
+ row:r=>[r.category||'Uncategorized',[r.date,r.account,r.notes].filter(Boolean).join(' · '),(r.type==='income'?'+':'−')+Neo.money(r.amount)]});
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Budget & Goals · neo</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="neo">
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script src="shell.js"></script>
+<script src="net.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<main id="app"></main>
+<script>
+Neo.collection({tab:'Budgets',title:'Budget & Goals',noun:'budget / goal',also:['Finance'],fields:[
+ {k:'kind',l:'Type',t:'select',opt:['budget','goal']},{k:'name',l:'Name',req:1},
+ {k:'category',l:'Category (budgets only)',t:'select',from:'Categories:expense',blank:1},{k:'amount',l:'Monthly limit / goal target',t:'number',req:1},
+ {k:'saved',l:'Saved so far (goals only)',t:'number'},{k:'deadline',l:'Deadline (goals)',t:'date'}],
+ group:r=>r.kind==='goal'?'Goals':'Monthly budgets',sort:(a,b)=>a.kind.localeCompare(b.kind)||a.name.localeCompare(b.name),
+ row:(r,X)=>{const a=Neo.num(r.amount)||1;if(r.kind==='goal'){const s=Neo.num(r.saved);return [r.name,Neo.money(s)+' of '+Neo.money(a)+(r.deadline?' · by '+r.deadline:''),Math.round(s/a*100)+'%',s/a*100]}
+  const m=Neo.today().slice(0,7),sp=(X.Finance||[]).filter(f=>f.type==='expense'&&f.date.slice(0,7)===m&&(!r.category||f.category===r.category)).reduce((t,f)=>t+Neo.num(f.amount),0);
+  return [r.name,Neo.money(sp)+' of '+Neo.money(a)+' this month',Math.round(sp/a*100)+'%',sp/a*100]}});
+</script>
+</body>
+</html>

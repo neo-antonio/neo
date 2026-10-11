@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notes · neo</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="neo">
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script src="shell.js"></script>
+<script src="net.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<main id="app"></main>
+<script>
+Neo.collection({tab:'Notes',title:'Notes',noun:'note',fields:[
+ {k:'title',l:'Title',req:1},{k:'body',l:'Note',t:'textarea'},{k:'pinned',l:'Pin to top',t:'check'}],
+ sort:(a,b)=>(!!b.pinned-!!a.pinned)||(b.updated||'').localeCompare(a.updated||''),
+ row:r=>[(r.pinned?'📌 ':'')+r.title,(r.body||'').replace(/\s+/g,' ').slice(0,110)]});
+</script>
+</body>
+</html>

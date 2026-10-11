@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home · neo</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="neo">
+<link rel="stylesheet" href="styles.css">
+<script src="config.js"></script>
+<script src="shell.js"></script>
+<script src="net.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const N=Neo,root=document.getElementById('app'),h=new Date().getHours();
+const tiles=NEO_GROUPS.slice(1).map(g=>'<p class="sec">'+g[0]+'</p><div class="tiles">'+g[1].map(i=>'<a class="tile" href="'+i[2]+'">'+NEO_SVG(i[0])+i[1]+'</a>').join('')+'</div>').join('');
+root.innerHTML='<h1>Good '+(h<12?'morning':h<18?'afternoon':'evening')+'</h1><p class="mut" style="margin:2px 0 0">'+new Date().toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'})+'</p><div class="cards" id="cards"></div>'+tiles;
+const card=(l,n,s,href)=>'<a class="card" href="'+href+'"><span class="l">'+l+'</span><span class="n">'+n+'</span><small>'+(s||'&nbsp;')+'</small></a>';
+const sum=(a,k)=>a.reduce((t,r)=>t+N.num(r[k]),0);
+function paint(D){const t=N.today(),lg=D.DailyLog.filter(r=>r.date===t),tgt=N.num((D.Profile[0]||{}).calorieTarget),open=D.Todos.filter(x=>x.status!=='done'),due=open.filter(x=>x.due&&x.due<=t).length,
+ hd=D.Habits.filter(x=>D.HabitLog.some(l=>l.habit===x.id&&l.date===t)).length,mo=t.slice(0,7),sp=sum(D.Finance.filter(r=>r.type==='expense'&&r.date.slice(0,7)===mo),'amount');
+ document.getElementById('cards').innerHTML=card('Calories today',sum(lg,'calories'),tgt?'of '+tgt:'','dailylog.html')+card('Open tasks',open.length,due?due+' due or overdue':'','todo.html')+card('Habits today',hd+'/'+D.Habits.length,'','habits.html')+card('Spent this month',N.money(sp).replace(/\.00$/,''),'','finance.html')}
+const T=['DailyLog','Todos','Habits','HabitLog','Finance','Profile'],c={};T.forEach(k=>c[k]=N.cached(k)||[]);paint(c);
+N.many(T).then(paint).catch(e=>{if(!N.ep())N.toast('Open Settings to connect your Google Sheet.');else N.toast(e.message)});
+</script>
+</body>
+</html>

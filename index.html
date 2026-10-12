@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>neo</title>
-<script>(function(){try{var m={slate:["#171717","#2e2e2e","rgba(23,23,23,0.06)"],ocean:["#1a5276","#2471a3","rgba(26,82,118,0.07)"],forest:["#1e6b45","#28895a","rgba(30,107,69,0.07)"],crimson:["#8b1a1a","#b02323","rgba(139,26,26,0.07)"],violet:["#5b2c8b","#7634b5","rgba(91,44,139,0.07)"],teal:["#0f6b6b","#1a8c8c","rgba(15,107,107,0.07)"],cocoa:["#6b3a1f","#8c4e28","rgba(107,58,31,0.07)"],dark:["#4a5370","#606885","rgba(74,83,112,0.15)"]};var id=localStorage.getItem("eatshimo_theme")||"slate",t=m[id]||m.slate,r=document.documentElement;r.style.setProperty("--accent",t[0]);r.style.setProperty("--accent-hi",t[1]);r.style.setProperty("--accent-dim",t[2]);if(id==="dark")r.classList.add("neo-dark");}catch(e){}})();</script>
+<script>(function(){try{var m={slate:["#171717","#2e2e2e","rgba(23,23,23,0.06)"],ocean:["#1a5276","#2471a3","rgba(26,82,118,0.07)"],forest:["#1e6b45","#28895a","rgba(30,107,69,0.07)"],crimson:["#8b1a1a","#b02323","rgba(139,26,26,0.07)"],violet:["#5b2c8b","#7634b5","rgba(91,44,139,0.07)"],teal:["#0f6b6b","#1a8c8c","rgba(15,107,107,0.07)"],cocoa:["#6b3a1f","#8c4e28","rgba(107,58,31,0.07)"],dark:["#4a5370","#606885","rgba(74,83,112,0.15)"]};var id=localStorage.getItem("eatshimo_theme")||localStorage.getItem("stashimo_theme")||"slate",t=m[id]||m.slate,r=document.documentElement;r.style.setProperty("--accent",t[0]);r.style.setProperty("--accent-hi",t[1]);r.style.setProperty("--accent-dim",t[2]);if(id==="dark")r.classList.add("neo-dark");}catch(e){}})();</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="manifest.json">
@@ -35,8 +35,13 @@
     <p class="sb-lbl">Food</p>
     <a class="sb-link" href="#/library" data-nav data-route="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Food Library</a>
     <a class="sb-link" href="#/daily" data-nav data-route="daily"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2.5"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Daily Log</a>
+    <a class="sb-link" href="#/planner" data-nav data-route="planner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>Meal Planner</a>
     <p class="sb-lbl">Health</p>
     <a class="sb-link" href="#/profile" data-nav data-route="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.5z"/></svg>Profile</a>
+    <p class="sb-lbl">Household</p>
+    <a class="sb-link" href="#/pantry" data-nav data-route="pantry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.4 11.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5 8z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M9 12h6"/></svg>Supplies</a>
+    <p class="sb-lbl">Money</p>
+    <a class="sb-link" href="#/distributor" data-nav data-route="distributor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.01M18 15h.01"/></svg>Distributor</a>
   </nav>
   <div class="sb-foot">
     <button type="button" class="sb-link" id="sbUser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c0-4 3.4-6.5 7.5-6.5s7.5 2.5 7.5 6.5"/></svg><span></span></button>
@@ -72,11 +77,14 @@
     <div class="hs-row hs-total"><span class="hs-l">Total business value</span><b id="sumTotal">0</b></div>
   </a>
 </section>
-  <div class="sec-head">Your apps<span>15</span></div>
+  <div class="sec-head">Your apps<span>18</span></div>
   <div class="grid6">
     <a class="tile" href="#/library" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="tile-t"><b>Food Library</b><small>Food</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Saved foods, presets and AI estimates</p></a>
     <a class="tile" href="#/daily" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2.5"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="tile-t"><b>Daily Log</b><small>Food</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Meals, water, steps, exercise and fasting</p></a>
     <a class="tile" href="#/profile" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.5z"/></svg></div><div class="tile-t"><b>Profile</b><small>Health</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Goals, calorie targets, trends and data</p></a>
+    <a class="tile" href="#/planner" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg></div><div class="tile-t"><b>Meal Planner</b><small>Food</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Weekly meals, ingredients and grocery list</p></a>
+    <a class="tile" href="#/pantry" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.4 11.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5 8z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M9 12h6"/></svg></div><div class="tile-t"><b>Supplies</b><small>Household</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Stock levels, restock cost and auto-deduct</p></a>
+    <a class="tile" href="#/distributor" data-live><div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.01M18 15h.01"/></svg></div><div class="tile-t"><b>Distributor</b><small>Money</small></div><svg class="tile-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg><p class="tile-d">Plan income, expenses and debts</p></a>
     
     <a class="tile" href="#">
       <div class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.2h12v19.6l-2-1.1-2 1.1-2-1.1-2 1.1-2-1.1-2 1.1z"/><line x1="8.2" y1="7" x2="15.8" y2="7"/><line x1="8.2" y1="11" x2="15.8" y2="11"/><line x1="8.2" y1="15" x2="13" y2="15"/></svg></div>
@@ -618,9 +626,303 @@
     </div>
 
   </div></main>
+<div class="top" id="stTop" hidden>
+  <div class="hbar"><a class="back" href="#/home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a><h2 id="stTitle">Supplies</h2><button type="button" class="icon-btn" aria-label="Settings" onclick="ST.openSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="tabs tabs-3" id="stTabs"><button type="button" class="tab active" data-r="pantry">Supplies</button><button type="button" class="tab" data-r="planner">Meal Planner</button><button type="button" class="tab" data-r="distributor">Distributor</button></div>
+</div>
+<main class="launcher es-main" id="view-st" hidden><div class="st">
+
+    <div class="page active" id="page-pantry">
+
+      <section class="card" id="add-item-section">
+        <h2>Add Item</h2>
+        <div class="form-grid">
+          <div class="st-field full">
+            <label for="item-name">Item Name</label>
+            <input type="text" id="item-name" placeholder="e.g. Rice, Shampoo" />
+          </div>
+          <div class="st-field">
+            <label for="item-type">Type</label>
+            <select id="item-type"></select>
+          </div>
+          <div class="st-field">
+            <label for="item-unit">Unit</label>
+            <select id="item-unit" onchange="ST.onUnitSelectChange('item-unit','item-unit-custom')">
+              <option value="piece">piece</option>
+              <option value="pack">pack</option>
+              <option value="bottle">bottle</option>
+              <option value="box">box</option>
+              <option value="can">can</option>
+              <option value="kg">kg</option>
+              <option value="g">g</option>
+              <option value="liter">liter</option>
+              <option value="ml">ml</option>
+              <option value="custom">+ Custom…</option>
+            </select>
+            <input type="text" id="item-unit-custom" placeholder="Custom unit name" style="display:none; margin-top:6px;" />
+          </div>
+          <div class="st-field">
+            <label for="item-min-price">Min Price (₱) <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+            <input type="number" id="item-min-price" placeholder="e.g. 300" min="0" step="0.01" />
+          </div>
+          <div class="st-field">
+            <label for="item-min-units">Min Units <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+            <input type="number" id="item-min-units" placeholder="e.g. 6" min="1" step="1" />
+          </div>
+          <div class="st-field">
+            <label for="item-current">Current Count <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+            <input type="number" id="item-current" placeholder="e.g. 3" min="0" />
+          </div>
+          <div class="st-field">
+            <label for="item-target">Target Count <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+            <input type="number" id="item-target" placeholder="e.g. 5" min="0" />
+          </div>
+          <div class="st-field full" style="flex-direction:row; align-items:center; gap:8px;">
+            <input type="checkbox" id="item-track-percent" onchange="ST.onTrackPercentChange('item-track-percent','item-target-percent-wrap')" style="width:16px; height:16px; accent-color:var(--border); flex-shrink:0;" />
+            <label for="item-track-percent" style="text-transform:none; font-size:13px; font-weight:400; color:var(--text-mid); cursor:pointer;">Measure percent of last stock</label>
+          </div>
+          <div class="st-field full" id="item-target-percent-wrap" style="display:none;">
+            <label for="item-target-percent">Target % of Last Unit Before Refill</label>
+            <input type="number" id="item-target-percent" placeholder="e.g. 20" min="0" max="100" />
+          </div>
+          <div class="st-field full" style="flex-direction:row; align-items:center; gap:8px;">
+            <input type="checkbox" id="item-auto-deduct-enabled" onchange="ST.onAutoDeductToggle('item')" style="width:16px; height:16px; accent-color:var(--border); flex-shrink:0;" />
+            <label for="item-auto-deduct-enabled" style="text-transform:none; font-size:13px; font-weight:400; color:var(--text-mid); cursor:pointer;">Auto-deduct on a schedule</label>
+          </div>
+          <div class="st-field full auto-deduct-wrap" id="item-auto-deduct-wrap" style="display:none;">
+            <div class="auto-deduct-row">
+              <select id="item-auto-deduct-mode" onchange="ST.onAutoDeductModeChange('item')">
+                <option value="count">Reduce count by</option>
+                <option value="percent">Reduce last stock % by</option>
+              </select>
+              <input type="number" id="item-auto-deduct-amount" min="1" value="1" />
+            </div>
+            <div class="auto-deduct-row">
+              <select id="item-auto-deduct-freq-type" onchange="ST.onAutoDeductFreqTypeChange('item')">
+                <option value="days">Every N days</option>
+                <option value="week">Weekly on</option>
+                <option value="month">Monthly on</option>
+              </select>
+            </div>
+            <div id="item-auto-deduct-freq-detail"></div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button id="save-item-btn" onclick="ST.saveItem()" style="flex:1;">Save Item</button>
+          <button class="btn-secondary" onclick="ST.openTypeModal()" style="flex-shrink:0;">+ Type</button>
+        </div>
+      </section>
+
+      <section class="card" id="restock-estimate-section">
+        <h2>Restock Cost Estimate</h2>
+        <div class="st-field full" style="margin-bottom:14px;">
+          <label for="restock-type-filter">Category</label>
+          <select id="restock-type-filter" onchange="ST.renderRestockEstimate()">
+            <option value="all">All Types</option>
+          </select>
+        </div>
+        <div class="grocery-summary cols-2">
+          <div class="grocery-stat">
+            <span class="grocery-stat-val" id="restock-min-cost">₱0</span>
+            <span class="grocery-stat-label">Min to Restock</span>
+          </div>
+          <div class="grocery-stat">
+            <span class="grocery-stat-val" id="restock-max-cost">₱0</span>
+            <span class="grocery-stat-label">Max Stock (Targets)</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="pantry-list-section">
+        <div class="section-header-row">
+          <h2>Supplies</h2>
+          <div class="header-row-actions">
+            <button class="btn-type-filter" onclick="ST.toggleTypeFilterPanel()">Types <span class="collapse-chevron" id="type-filter-chevron">▾</span></button>
+            <input type="text" id="pantry-search" placeholder="Search..." oninput="ST.renderPantry()" />
+          </div>
+        </div>
+        <div class="type-filter-panel collapsible-body hidden" id="type-filter-panel">
+          <div id="type-filter-checkboxes"></div>
+          <div class="type-filter-actions">
+            <button class="btn-secondary btn-sm" onclick="ST.setAllTypeFilters(true)">Select All</button>
+            <button class="btn-secondary btn-sm" onclick="ST.setAllTypeFilters(false)">Clear All</button>
+          </div>
+        </div>
+        <div class="filter-pills" id="pantry-filter-pills">
+          <button class="filter-pill active" data-filter="all" onclick="ST.setPantryFilter('all', this)">All</button>
+          <button class="filter-pill" data-filter="ok" onclick="ST.setPantryFilter('ok', this)">In Stock</button>
+          <button class="filter-pill" data-filter="low" onclick="ST.setPantryFilter('low', this)">Needs Refill</button>
+          <button class="filter-pill" data-filter="out" onclick="ST.setPantryFilter('out', this)">Out of Stock</button>
+        </div>
+        <div id="pantry-list">
+          <p class="empty-msg">No items yet. Add your first item above!</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="page" id="page-planner">
+
+      <section class="card">
+        <div class="week-nav">
+          <button onclick="ST.changeWeek(-1)">‹</button>
+          <div class="week-nav-label" id="week-nav-label" onclick="ST.openCalendar()">
+            <div class="week-range" id="week-range-text">Loading...</div>
+            <div class="week-sub" id="week-sub-text">Tap to pick a week</div>
+          </div>
+          <button onclick="ST.changeWeek(1)">›</button>
+        </div>
+        <div class="week-actions">
+          <button class="btn-edit-goal" onclick="ST.openCalendar()">Pick Week</button>
+          <button class="btn-edit-goal" onclick="ST.goToThisWeek()">This Week</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-header-row">
+          <h2>Planned Meals</h2>
+        </div>
+        <div id="meal-week-list">
+          <p class="empty-msg">No meals planned for this week yet.</p>
+        </div>
+        <button class="btn-add-card-item" onclick="ST.openMealModal()">+ Add Meal</button>
+      </section>
+
+      <section class="card">
+        <h2>Grocery List</h2>
+        <p class="card-desc" style="padding-top:0;margin-top:-10px;">Ingredients for meals planned this week.</p>
+        <div class="grocery-summary">
+          <div class="grocery-stat total">
+            <span class="grocery-stat-val" id="grocery-total-cost">₱0</span>
+            <span class="grocery-stat-label">Total Est.</span>
+          </div>
+          <div class="grocery-stat bought">
+            <span class="grocery-stat-val" id="grocery-bought-cost">₱0</span>
+            <span class="grocery-stat-label">Bought</span>
+          </div>
+          <div class="grocery-stat remaining">
+            <span class="grocery-stat-val" id="grocery-remaining-cost">₱0</span>
+            <span class="grocery-stat-label">Remaining</span>
+          </div>
+        </div>
+        <div id="grocery-list">
+          <p class="empty-msg">Nothing to buy yet. Plan a meal first.</p>
+        </div>
+        <div class="grocery-add-row" style="margin-top:14px; margin-bottom:0;">
+          <input type="text" id="grocery-extra-name" placeholder="Add other items" />
+          <input type="number" id="grocery-extra-cost" placeholder="₱" min="0" step="0.01" />
+          <button onclick="ST.addExtraGroceryItem()">Add</button>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="page" id="page-distributor">
+
+      <section class="card">
+        <div class="section-header-row">
+          <h2>Overview</h2>
+        </div>
+        <div class="st-field full" style="margin-bottom:14px;">
+          <label for="dist-plan-name">Plan Name</label>
+          <input type="text" id="dist-plan-name" placeholder="e.g. July Budget" onchange="ST.onDistPlanNameChange()" />
+        </div>
+        <div class="grocery-summary">
+          <div class="grocery-stat">
+            <span class="grocery-stat-val" id="dist-money-left">₱0</span>
+            <span class="grocery-stat-label">Money Left</span>
+          </div>
+          <div class="grocery-stat">
+            <span class="grocery-stat-val" id="dist-expected-salary">-</span>
+            <span class="grocery-stat-label">Expected Money</span>
+          </div>
+          <div class="grocery-stat">
+            <span class="grocery-stat-val" id="dist-debts-accrued">₱0</span>
+            <span class="grocery-stat-label">Debts Accrued</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-secondary" style="flex:1;" onclick="ST.copyDistributorPlan()">Copy</button>
+          <button class="btn-secondary" style="flex:1;" onclick="ST.exportDistributorPlan()">Export</button>
+          <button class="btn-delete" style="flex:1;" onclick="ST.clearDistributorEntries()">Clear</button>
+        </div>
+      </section>
+
+      <section class="card" id="add-income-section">
+        <h2>Add Income or Credit</h2>
+        <div class="form-grid">
+          <div class="st-field full">
+            <label for="income-name">Name</label>
+            <input type="text" id="income-name" placeholder="e.g. Salary" />
+          </div>
+          <div class="st-field">
+            <label for="income-date">Expected Date</label>
+            <input type="date" id="income-date" />
+          </div>
+          <div class="st-field">
+            <label for="income-amount">Amount (₱)</label>
+            <input type="number" id="income-amount" placeholder="e.g. 25000" min="0" step="0.01" />
+          </div>
+        </div>
+        <input type="hidden" id="editing-income-id" />
+        <div class="form-actions-row">
+          <button class="btn-delete" id="income-delete-btn" style="display:none;" onclick="ST.deleteIncomeFromForm()">Delete</button>
+          <button id="save-income-btn" onclick="ST.saveIncome()">Save Income</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Income and Credit</h2>
+        <div id="income-list"></div>
+      </section>
+
+      <section class="card" id="add-budget-item-section">
+        <h2>Add Expense or Repayments</h2>
+        <div class="form-grid">
+          <div class="st-field full">
+            <label for="budget-item-name">Name</label>
+            <input type="text" id="budget-item-name" placeholder="e.g. Rent, New Phone" />
+          </div>
+          <div class="st-field">
+            <label for="budget-item-date">Date <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+            <input type="date" id="budget-item-date" />
+          </div>
+          <div class="st-field">
+            <label for="budget-item-amount">Amount (₱)</label>
+            <input type="number" id="budget-item-amount" placeholder="e.g. 1500" min="0" step="0.01" />
+          </div>
+          <div class="st-field full" style="flex-direction:row; align-items:center; gap:8px;">
+            <input type="checkbox" id="budget-item-is-debt" style="width:16px; height:16px; accent-color:var(--border); flex-shrink:0;" />
+            <label for="budget-item-is-debt" style="text-transform:none; font-size:13px; font-weight:400; color:var(--text-mid); cursor:pointer;">This is a debt or credit card purchase</label>
+          </div>
+        </div>
+        <input type="hidden" id="editing-budget-item-id" />
+        <div class="form-actions-row">
+          <button class="btn-delete" id="budget-item-delete-btn" style="display:none;" onclick="ST.deleteBudgetItemFromForm()">Delete</button>
+          <button id="save-budget-item-btn" onclick="ST.saveBudgetItem()">Save Item</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Planned Expenses</h2>
+        <div id="budget-items-list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Debts &amp; Credit Card Purchases</h2>
+        <div id="debt-items-list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Other Notes</h2>
+        <p class="modal-sub" style="margin-bottom:10px;">Anything else worth keeping track of for this plan.</p>
+        <textarea id="dist-other-notes" rows="4" placeholder="e.g. reminders, transfer from accounts, upcoming changes..." oninput="ST.onDistNotesChange()"></textarea>
+      </section>
+    </div>
+
+  </div></main>
 <footer class="site-footer">
   <p>&copy;2026 Court Vision<br>All rights reserved.</p>
-  <p>neo <span class="ver">v0.2</span><br><span class="ver">Food &amp; Health from eatshimo v4.2</span></p>
+  <p>neo <span class="ver">v0.3</span><br><span class="ver">Food &amp; Health from eatshimo v4.2<br>Supplies &amp; Money from stashimo v1.0</span></p>
 </footer>
 
 <div class="modal" id="nameSheet" hidden>
@@ -920,6 +1222,226 @@
   </div>
 
   <button class="help-btn" id="esHelp" hidden aria-label="Help" onclick="openTutorial()">?</button></div>
+<div class="st" id="stOverlays"><div id="item-modal-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeItemModal()">
+    <div class="st-modal">
+      <h2 id="item-modal-title">Edit Item</h2>
+      <input type="hidden" id="edit-item-id" />
+      <div class="form-grid">
+        <div class="st-field full"><label>Item Name</label><input type="text" id="edit-item-name" /></div>
+        <div class="st-field"><label>Type</label><select id="edit-item-type"></select></div>
+        <div class="st-field">
+          <label>Unit</label>
+          <select id="edit-item-unit" onchange="ST.onUnitSelectChange('edit-item-unit','edit-item-unit-custom')">
+            <option value="piece">piece</option>
+            <option value="pack">pack</option>
+            <option value="bottle">bottle</option>
+            <option value="box">box</option>
+            <option value="can">can</option>
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="liter">liter</option>
+            <option value="ml">ml</option>
+            <option value="custom">+ Custom…</option>
+          </select>
+          <input type="text" id="edit-item-unit-custom" placeholder="Custom unit name" style="display:none; margin-top:6px;" />
+        </div>
+        <div class="st-field"><label>Min Price (₱)</label><input type="number" id="edit-item-min-price" min="0" step="0.01" /></div>
+        <div class="st-field"><label>Min Units</label><input type="number" id="edit-item-min-units" min="1" step="1" /></div>
+        <div class="st-field"><label>Current Count</label><input type="number" id="edit-item-current" min="0" /></div>
+        <div class="st-field"><label>Target Count</label><input type="number" id="edit-item-target" min="0" /></div>
+        <div class="st-field full" style="flex-direction:row; align-items:center; gap:8px;">
+          <input type="checkbox" id="edit-item-track-percent" onchange="ST.onTrackPercentChange('edit-item-track-percent','edit-item-target-percent-wrap')" style="width:16px; height:16px; accent-color:var(--border); flex-shrink:0;" />
+          <label for="edit-item-track-percent" style="font-size:13px; font-weight:400; color:var(--text-mid); cursor:pointer;">Measure percent of last stock</label>
+        </div>
+        <div class="st-field full" id="edit-item-target-percent-wrap" style="display:none;">
+          <label>Target % of Last Unit Before Refill</label>
+          <input type="number" id="edit-item-target-percent" min="0" max="100" />
+        </div>
+        <div class="st-field full" style="flex-direction:row; align-items:center; gap:8px;">
+          <input type="checkbox" id="edit-item-auto-deduct-enabled" onchange="ST.onAutoDeductToggle('edit-item')" style="width:16px; height:16px; accent-color:var(--border); flex-shrink:0;" />
+          <label for="edit-item-auto-deduct-enabled" style="text-transform:none; font-size:13px; font-weight:400; color:var(--text-mid); cursor:pointer;">Auto-deduct on a schedule</label>
+        </div>
+        <div class="st-field full auto-deduct-wrap" id="edit-item-auto-deduct-wrap" style="display:none;">
+          <div class="auto-deduct-row">
+            <select id="edit-item-auto-deduct-mode" onchange="ST.onAutoDeductModeChange('edit-item')">
+              <option value="count">Reduce count by</option>
+              <option value="percent">Reduce last stock % by</option>
+            </select>
+            <input type="number" id="edit-item-auto-deduct-amount" min="1" value="1" />
+          </div>
+          <div class="auto-deduct-row">
+            <select id="edit-item-auto-deduct-freq-type" onchange="ST.onAutoDeductFreqTypeChange('edit-item')">
+              <option value="days">Every N days</option>
+              <option value="week">Weekly on</option>
+              <option value="month">Monthly on</option>
+            </select>
+          </div>
+          <div id="edit-item-auto-deduct-freq-detail"></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-delete" style="flex:0.6;" onclick="ST.deleteItem()">Delete</button>
+        <button class="btn-secondary" onclick="ST.closeItemModal()">Cancel</button>
+        <button onclick="ST.updateItem()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="type-modal-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeTypeModal()">
+    <div class="st-modal">
+      <h2>Manage Types</h2>
+      <p class="modal-sub">Create types to group your supplies (e.g. Food, Bathroom, Cleaning).</p>
+
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="st-field full">
+          <label>Type Name</label>
+          <input type="text" id="new-type-name" placeholder="e.g. Bathroom" />
+        </div>
+      </div>
+      <input type="hidden" id="editing-type-id" />
+      <button class="btn-full" id="type-save-btn" onclick="ST.saveType()">Add Type</button>
+
+      <div class="section-divider" style="margin-top:20px;">Existing Types</div>
+      <div id="type-list"></div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="ST.closeTypeModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="meal-modal-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeMealModal()">
+    <div class="st-modal">
+      <h2 id="meal-modal-title">Add Meal</h2>
+      <input type="hidden" id="editing-meal-id" />
+      <div class="form-grid">
+        <div class="st-field full">
+          <label>Meal Name</label>
+          <input type="text" id="meal-name" placeholder="e.g. Chicken Adobo" />
+        </div>
+        <div class="st-field full">
+          <label>Day</label>
+          <select id="meal-day">
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+          </select>
+        </div>
+        <div class="st-field full">
+          <label>Note <span style="text-transform:none;font-style:italic;">(optional)</span></label>
+          <textarea id="meal-note" placeholder="e.g. Use the slow cooker, double the recipe..." rows="2"></textarea>
+        </div>
+      </div>
+
+      <div class="section-divider">Ingredients</div>
+      <div class="ingredient-list-wrap" id="meal-ingredient-list"></div>
+      <button class="btn-add-ingredient" onclick="ST.addIngredientRow()">+ Add Ingredient</button>
+
+      <div class="modal-actions">
+        <button class="btn-delete" id="meal-delete-btn" style="flex:0.6; display:none;" onclick="ST.deleteMeal()">Delete</button>
+        <button class="btn-secondary" onclick="ST.closeMealModal()">Cancel</button>
+        <button onclick="ST.saveMeal()">Save Meal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="st-cal-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeCalendar()">
+    <div class="cal-modal">
+      <div class="cal-header">
+        <button class="st-cal-nav" onclick="ST.calPrevMonth()">‹</button>
+        <span id="st-cal-month-label"></span>
+        <button class="st-cal-nav" onclick="ST.calNextMonth()">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+      </div>
+      <div class="st-cal-grid" id="st-cal-grid"></div>
+      <div style="text-align:center;margin-top:14px;">
+        <button class="btn-secondary" onclick="ST.closeCalendar()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="settings-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeSettings()">
+    <div class="st-modal">
+      <h2>Settings</h2>
+      <p class="modal-sub">All data is stored locally on your device.</p>
+
+      <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:10px;">
+        <div class="settings-row-label">App Theme</div>
+        <div class="theme-swatch-grid" id="theme-swatch-grid"></div>
+      </div>
+
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Export Data</div>
+          <div class="settings-row-desc">Download a backup as a JSON file.</div>
+        </div>
+        <button class="btn-secondary" onclick="ST.exportData()">Export</button>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Import Data</div>
+          <div class="settings-row-desc">Restore from a backup JSON file.</div>
+        </div>
+        <button class="btn-secondary" onclick="document.getElementById('import-file-input').click()">Import</button>
+        <input type="file" id="import-file-input" accept="application/json" style="display:none;" onchange="ST.importData(event)" />
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label" style="color:var(--danger);">Reset All Data</div>
+          <div class="settings-row-desc">Permanently erase everything.</div>
+        </div>
+        <button class="btn-delete" onclick="ST.resetAllData()">Reset</button>
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="ST.closeSettings()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="st-tutorial-overlay" class="modal-overlay-base hidden" onclick="if(event.target===this)ST.closeTutorial()">
+    <div class="tutorial-modal">
+      <div class="tutorial-steps">
+        <div class="tutorial-step active" id="st-tut-step-0">
+          <h3>Supplies Tracker</h3>
+          <p>Add food and supplies, group them by a custom-colored type, and track a unit and price. Each card has quick buttons to knock down stock, jump straight to a percent, or flag an item as needing a refill or out of stock. Those flag buttons disappear once applied; restocking or picking the other status is what clears them.</p>
+        </div>
+        <div class="tutorial-step" id="st-tut-step-1">
+          <h3>Bulk Pricing & Restock Cost</h3>
+          <p>If an item can only be bought in bulk (e.g. ₱300 for a pack of 6), set Min Price and Min Units to that pack price and quantity. The Restock Cost Estimate then rounds up to full packs, since you can't buy a single unit on its own.</p>
+          <p style="margin-top:10px;">For things like shampoo or lotion, check "Measure percent of last stock" to track fullness of just the last bottle. It stays at 100% while 2 or more are in stock, and you can set a target percent for when it should flag as needing refill.</p>
+        </div>
+        <div class="tutorial-step" id="st-tut-step-2">
+          <h3>Meal Planner</h3>
+          <p>Plan meals for any day of the week and list the ingredients you'll need. Each meal card shows how many ingredients are bought; tap Edit to see or check off the full list.</p>
+          <p style="margin-top:10px;">Meals belong to one week only. If you type the same ingredient name into more than one meal, it's treated as one shared item, so buying it checks it off for every meal that uses it. Check off items in the Grocery List as you shop.</p>
+        </div>
+        <div class="tutorial-step" id="st-tut-step-3">
+          <h3>Distributor</h3>
+          <p>Name your plan, then log expected income and planned expenses to see what's left. Mark a purchase as debt or credit card, and it's tracked separately as Debts Accrued so you can see what you owe, on top of reducing Money Left like any other expense.</p>
+          <p style="margin-top:10px;">Use Copy Plan or Export Plan anytime to save a quick reference of the whole tab.</p>
+        </div>
+      </div>
+      <div class="tutorial-dots">
+        <span class="tut-dot active" onclick="ST.goToTutStep(0)"></span>
+        <span class="tut-dot" onclick="ST.goToTutStep(1)"></span>
+        <span class="tut-dot" onclick="ST.goToTutStep(2)"></span>
+        <span class="tut-dot" onclick="ST.goToTutStep(3)"></span>
+      </div>
+      <div class="tutorial-actions">
+        <button class="btn-secondary" id="st-tut-prev" onclick="ST.tutNav(-1)" style="visibility:hidden;">Back</button>
+        <button id="st-tut-next" onclick="ST.tutNav(1)">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="help-btn" id="stHelp" hidden aria-label="Help" onclick="ST.openTutorial()">?</button></div>
 <div class="toast" id="homeToast" hidden></div>
 <script src="app.js"></script>
 

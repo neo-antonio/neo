@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'neo-v0.2';
+const CACHE_VERSION = 'neo-v0.3';
 const CACHE_NAME = CACHE_VERSION;
 
 // App shell: everything neo needs to open offline.

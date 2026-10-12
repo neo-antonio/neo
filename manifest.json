@@ -1,7 +1,7 @@
 {
   "name": "neo",
   "short_name": "neo",
-  "description": "A local-first workspace for food and health",
+  "description": "A local-first workspace for food, health, supplies and money",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -11,5 +11,5 @@
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
-  "categories": ["health", "fitness", "food", "productivity"]
+  "categories": ["health", "fitness", "food", "productivity", "finance"]
 }

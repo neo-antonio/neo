@@ -1,25 +1,74 @@
-const V = 'neo-v1';
-const SHELL = ['./', 'index.html', 'profile.html', 'dailylog.html', 'foods.html', 'meals.html', 'statistics.html', 'todo.html', 'habits.html', 'calendar.html', 'notes.html',
-  'finance.html', 'budget.html', 'categories.html', 'settings.html', 'styles.css', 'config.js', 'shell.js', 'net.js', 'app.js', 'manifest.webmanifest',
-  'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(V).then(c => Promise.all(SHELL.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {})))));
-  self.skipWaiting();
+const CACHE_VERSION = 'neo-v0.2';
+const CACHE_NAME = CACHE_VERSION;
+
+// App shell: everything neo needs to open offline.
+const PRECACHE_URLS = [
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './manifest.json',
+  './favicon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png'
+];
+
+// Third-party files neo relies on (charts + font). Cached best-effort so the
+// Profile charts still draw offline; a failure here never blocks install.
+const EXTERNAL_URLS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) =>
+        cache.addAll(PRECACHE_URLS).then(() =>
+          Promise.all(EXTERNAL_URLS.map((url) =>
+            fetch(new Request(url, { mode: 'no-cors' }))
+              .then((res) => cache.put(url, res))
+              .catch(() => {})
+          ))
+        )
+      )
+      .then(() => self.skipWaiting())
+  );
 });
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== V).map(n => caches.delete(n)))));
-  self.clients.claim();
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      )
+    ).then(() => self.clients.claim())
+  );
 });
-// Network-first so pages, scripts and styles always come from the same deploy; cache is the offline / slow (4s) fallback.
-self.addEventListener('fetch', e => {
-  const req = e.request;
+
+// Network first, fall back to the cache when offline.
+// Only the app's own files and the pinned third-party files are cached.
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
   if (req.method !== 'GET' || !req.url.startsWith('http')) return;
-  if (new URL(req.url).origin !== self.location.origin) return; // Apps Script (JSONP) + fonts go straight to the network
-  e.respondWith((async () => {
-    const cache = await caches.open(V);
-    const net = fetch(req, { cache: 'no-cache' }).then(r => { if (r && r.ok) cache.put(req, r.clone()); return r; });
-    net.catch(() => {});
-    try { return await Promise.race([net, new Promise((_, rej) => setTimeout(() => rej(new Error('slow')), 4000))]); }
-    catch (_) { return (await cache.match(req, { ignoreSearch: true })) || net.catch(() => Response.error()); }
-  })());
+
+  const isHTML = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
+
+  event.respondWith(
+    fetch(req)
+      .then((res) => {
+        // status 0 / "opaque" = cross-origin script or font fetched without CORS
+        if (res && (res.status === 200 || res.type === 'opaque')) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+        }
+        return res;
+      })
+      .catch(() => caches.match(req).then((cached) => cached || (isHTML ? caches.match('./index.html') : undefined)))
+  );
 });

@@ -1,7 +1,7 @@
 {
   "name": "neo",
   "short_name": "neo",
-  "description": "A local-first workspace for food, health, supplies and money",
+  "description": "A local-first workspace for food, health, supplies, money and finances",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",

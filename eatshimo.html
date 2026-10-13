@@ -1,0 +1,749 @@
+<!-- eatshimo: header + tabs, pages, dialogs. Injected into #host-es by app.js; styled by the .es rules in styles.css. -->
+<div class="top" id="esTop" hidden>
+  <div class="hbar"><a class="back" href="#/home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a><h2 id="esTitle">Food Library</h2><span class="hbar-spacer"></span></div>
+  <div class="tabs tabs-3" id="esTabs"><button type="button" class="tab active" data-r="library">Food Library</button><button type="button" class="tab" data-r="daily">Daily Log</button><button type="button" class="tab" data-r="profile">Profile</button></div>
+</div>
+
+<main class="launcher es-main" id="view-es" hidden><div class="es">
+
+    <div class="page active" id="page-library">
+      <section class="card" id="add-section">
+        <h2>Add Food</h2>
+        <div class="form-grid">
+          <div class="es-field full">
+            <label for="food-name">Food Name</label>
+            <div style="display:flex;gap:8px;align-items:stretch;">
+              <input type="text" id="food-name" placeholder="e.g. Chicken Breast" style="flex:1;" />
+              <button type="button" class="btn-ai-estimate" onclick="openAIEstimate()">✦ Ask AI</button>
+            </div>
+          </div>
+          <div class="es-field">
+            <label for="food-grams">Serving Size (g)</label>
+            <input type="number" id="food-grams" placeholder="e.g. 100" min="1" />
+          </div>
+          <div class="es-field">
+            <label for="food-calories">Calories (kcal)</label>
+            <input type="number" id="food-calories" placeholder="e.g. 165" min="0" />
+          </div>
+          <div class="es-field">
+            <label for="food-protein">Protein (g)</label>
+            <input type="number" id="food-protein" placeholder="e.g. 31" min="0" />
+          </div>
+          <div class="es-field">
+            <label for="food-carbs">Carbs (g)</label>
+            <input type="number" id="food-carbs" placeholder="e.g. 0" min="0" />
+          </div>
+          <div class="es-field">
+            <label for="food-fat">Fat (g)</label>
+            <input type="number" id="food-fat" placeholder="e.g. 3.6" min="0" />
+          </div>
+          <div class="es-field">
+            <label for="food-fiber">Fiber (g)</label>
+            <input type="number" id="food-fiber" placeholder="e.g. 2" min="0" />
+          </div>
+        </div>
+        <button id="save-btn" onclick="saveFood()">Save Food</button>
+      </section>
+
+      <section class="card" id="library-section">
+        <div class="library-header">
+          <h2>Food Library</h2>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="btn-presets" onclick="togglePresets()">+ Presets</button>
+            <input type="text" id="search-input" placeholder="Search..." oninput="renderLibrary()" />
+          </div>
+        </div>
+        <div id="preset-panel" class="hidden">
+          <div class="preset-tabs">
+            <button class="preset-tab active" onclick="switchTab('common')">Common Foods</button>
+            <button class="preset-tab" onclick="switchTab('filipino')">Filipino Foods</button>
+          </div>
+          <div id="preset-list" class="preset-list"></div>
+        </div>
+        <div id="food-list">
+          <p class="empty-msg">No foods saved yet. Add one above or use Presets!</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="page" id="page-daily">
+      <section class="card">
+        <div class="date-nav">
+          <button onclick="changeDate(-1)">‹</button>
+          <div id="current-date" onclick="openCalendar()" style="cursor:pointer;"></div>
+          <button onclick="changeDate(1)">›</button>
+        </div>
+        <div class="date-actions">
+          <button class="btn-edit-goal" onclick="openCalendar()">Pick Date</button>
+          <button class="btn-edit-goal" onclick="goToToday()">Go to Today</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <h2 style="margin-bottom:0;">Today's Summary</h2>
+          <button class="btn-edit-goal" onclick="editCalorieGoal()">Edit Goal</button>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-stat"><span class="stat-val" id="sum-calories">0</span><span class="stat-label">Eaten kcal</span></div>
+          <div class="summary-stat"><span class="stat-val" id="sum-protein">0g</span><span class="stat-label">Protein</span></div>
+          <div class="summary-stat"><span class="stat-val" id="sum-carbs">0g</span><span class="stat-label">Carbs</span></div>
+          <div class="summary-stat"><span class="stat-val" id="sum-fat">0g</span><span class="stat-label">Fat</span></div>
+        </div>
+        <div class="calorie-bar-wrap"><div class="calorie-bar" id="calorie-bar" style="width:0%"></div></div>
+        <div class="calorie-label" id="calorie-label">Set your calorie target</div>
+      </section>
+
+      <section class="card">
+        <div class="log-header">
+          <h2>Meals</h2>
+          <button class="btn-log-food" onclick="openLogModal()">+ Add Meal</button>
+        </div>
+        <div id="meal-list"><p class="empty-msg">No meals logged yet today.</p></div>
+      </section>
+
+      <section class="card collapsible-card" id="card-extras">
+        <div class="collapsible-header" onclick="toggleCardCollapse('extras')">
+          <h2>Daily Extras</h2>
+          <span class="collapse-chevron" id="chevron-extras">▲</span>
+        </div>
+        <div class="collapsible-body" id="body-extras">
+          <div class="extras-grid">
+            <div class="extra-card">
+              <span class="extra-label">Water</span>
+              <span class="extra-val" id="water-val">0</span>
+              <span class="extra-unit">ml today</span>
+              <input type="number" id="water-input" placeholder="e.g. 250" min="0" />
+              <div class="extra-btn-row">
+                <button onclick="logWater()">+ Add</button>
+                <button class="btn-clear-water" onclick="clearWater()">Clear</button>
+              </div>
+            </div>
+            <div class="extra-card">
+              <span class="extra-label">Steps</span>
+              <div class="steps-count-row">
+                <span class="extra-val" id="steps-val">0</span>
+                <span class="steps-burned" id="steps-burned"></span>
+              </div>
+              <span class="extra-unit">steps today</span>
+              <input type="number" id="steps-input" placeholder="e.g. 1000" min="0" />
+              <div class="extra-btn-row">
+                <button onclick="logSteps()">Set</button>
+                <button class="btn-clear-water" onclick="clearSteps()">Clear</button>
+              </div>
+            </div>
+            <div class="extra-card">
+              <span class="extra-label">Weight</span>
+              <span class="extra-val" id="weight-val">—</span>
+              <span class="extra-unit">kg (optional)</span>
+              <input type="number" id="weight-input" placeholder="e.g. 70.5" min="0" step="0.1" />
+              <div class="extra-btn-row">
+                <button onclick="logWeight()">Log</button>
+                <button class="btn-clear-water" onclick="clearWeight()">Clear</button>
+              </div>
+            </div>
+            <div class="extra-card">
+              <span class="extra-label">Sleep</span>
+              <span class="extra-val" id="sleep-val">—</span>
+              <span class="extra-unit">hrs last night</span>
+              <input type="number" id="sleep-input" placeholder="e.g. 7.5" min="0" max="24" step="0.5" />
+              <div class="extra-btn-row">
+                <button onclick="logSleep()">Log</button>
+                <button class="btn-clear-water" onclick="clearSleep()">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card collapsible-card" id="card-exercise">
+        <div class="collapsible-header" onclick="toggleCardCollapse('exercise')">
+          <h2>Exercise Tracker</h2>
+          <span class="collapse-chevron" id="chevron-exercise">▲</span>
+        </div>
+        <div class="collapsible-body" id="body-exercise">
+          <div id="exercise-list" class="ex-list-scroll"></div>
+          <button class="btn-add-card-item" onclick="openAddExModal()">+ Add Exercise</button>
+        </div>
+      </section>
+
+      <section class="card collapsible-card" id="card-fasting">
+        <div class="collapsible-header" onclick="toggleCardCollapse('fasting')">
+          <h2>Fasting</h2>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="btn-card-settings" onclick="event.stopPropagation();openFastingSettings()" title="Fasting Settings" role="button">⚙</span>
+            <span class="collapse-chevron" id="chevron-fasting">▲</span>
+          </div>
+        </div>
+        <div class="collapsible-body" id="body-fasting">
+          <div id="fasting-status-display"></div>
+          <p id="fasting-window-label" class="fasting-window-label"></p>
+        </div>
+      </section>
+
+      <section class="card collapsible-card" id="card-foodmod">
+        <div class="collapsible-header" onclick="toggleCardCollapse('foodmod')">
+          <h2>Food Moderator</h2>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="btn-card-settings" onclick="event.stopPropagation();openFoodModSettings()" title="Cooldown Settings" role="button">⚙</span>
+            <span class="collapse-chevron" id="chevron-foodmod">▲</span>
+          </div>
+        </div>
+        <div class="collapsible-body" id="body-foodmod">
+          <div id="foodmod-list"></div>
+          <button class="btn-add-card-item" onclick="openFoodCatModal()">+ Add Food Category</button>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="page" id="page-profile">
+      <section class="card">
+        <h2>Your Profile</h2>
+        <div class="form-grid">
+          <div class="es-field">
+            <label>Gender</label>
+            <select id="prof-gender">
+              <option value="">Select...</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="es-field">
+            <label>Age</label>
+            <input type="number" id="prof-age" placeholder="e.g. 25" min="1" max="120" />
+          </div>
+          <div class="es-field">
+            <label>Height (cm)</label>
+            <input type="number" id="prof-height" placeholder="e.g. 170" min="50" />
+          </div>
+          <div class="es-field">
+            <label>Weight (kg)</label>
+            <input type="number" id="prof-weight" placeholder="e.g. 70" min="1" step="0.1" />
+          </div>
+          <div class="es-field full">
+            <label>Activity Level</label>
+            <select id="prof-activity">
+              <option value="1.2">Sedentary (little or no exercise)</option>
+              <option value="1.375">Lightly active (1–3 days/week)</option>
+              <option value="1.55">Moderately active (3–5 days/week)</option>
+              <option value="1.725">Very active (6–7 days/week)</option>
+              <option value="1.9">Extra active (physical job + exercise)</option>
+            </select>
+          </div>
+          <div class="es-field full">
+            <label>Time Zone</label>
+            <select id="prof-timezone">
+              <option value="Asia/Manila">Philippines (Asia/Manila) — Default</option>
+              <option value="Asia/Singapore">Singapore (Asia/Singapore)</option>
+              <option value="Asia/Kuala_Lumpur">Malaysia (Asia/Kuala_Lumpur)</option>
+              <option value="Asia/Jakarta">Indonesia — WIB (Asia/Jakarta)</option>
+              <option value="Asia/Makassar">Indonesia — WITA (Asia/Makassar)</option>
+              <option value="Asia/Jayapura">Indonesia — WIT (Asia/Jayapura)</option>
+              <option value="Asia/Bangkok">Thailand (Asia/Bangkok)</option>
+              <option value="Asia/Ho_Chi_Minh">Vietnam (Asia/Ho_Chi_Minh)</option>
+              <option value="Asia/Tokyo">Japan (Asia/Tokyo)</option>
+              <option value="Asia/Seoul">South Korea (Asia/Seoul)</option>
+              <option value="Asia/Shanghai">China (Asia/Shanghai)</option>
+              <option value="Asia/Kolkata">India (Asia/Kolkata)</option>
+              <option value="Asia/Dubai">UAE (Asia/Dubai)</option>
+              <option value="Europe/London">UK (Europe/London)</option>
+              <option value="Europe/Paris">Central Europe (Europe/Paris)</option>
+              <option value="America/New_York">US Eastern (America/New_York)</option>
+              <option value="America/Chicago">US Central (America/Chicago)</option>
+              <option value="America/Denver">US Mountain (America/Denver)</option>
+              <option value="America/Los_Angeles">US Pacific (America/Los_Angeles)</option>
+              <option value="America/Sao_Paulo">Brazil (America/Sao_Paulo)</option>
+              <option value="Australia/Sydney">Australia Eastern (Australia/Sydney)</option>
+              <option value="Pacific/Auckland">New Zealand (Pacific/Auckland)</option>
+              <option value="UTC">UTC</option>
+            </select>
+          </div>
+        </div>
+        <div class="section-divider">Calorie Goal <span>(optional)</span></div>
+        <div class="calorie-goal-row">
+          <input type="number" id="prof-calorie-goal" placeholder="e.g. 2000" min="0" />
+          <button onclick="saveCalorieGoalFromProfile()">Set Goal</button>
+        </div>
+        <div id="prof-calorie-goal-display" style="font-size:12px;color:var(--text-dim);margin-bottom:12px;font-style:italic;"></div>
+        <div class="section-divider">Macro Goals <span>(optional)</span></div>
+        <div class="form-grid">
+          <div class="es-field">
+            <label>Protein Goal (g)</label>
+            <input type="number" id="prof-protein-goal" placeholder="e.g. 150" min="0" />
+          </div>
+          <div class="es-field">
+            <label>Carbs Goal (g)</label>
+            <input type="number" id="prof-carbs-goal" placeholder="e.g. 200" min="0" />
+          </div>
+          <div class="es-field">
+            <label>Fat Goal (g)</label>
+            <input type="number" id="prof-fat-goal" placeholder="e.g. 60" min="0" />
+          </div>
+        </div>
+        <button onclick="saveProfile()">Save Profile</button>
+      </section>
+
+      <section class="card collapsible-card" id="tdee-card" style="display:none;">
+        <div class="collapsible-header" onclick="toggleCardCollapse('tdee')">
+          <h2>Calorie Targets</h2>
+          <span class="collapse-chevron" id="chevron-tdee">▼</span>
+        </div>
+        <div class="collapsible-body" id="body-tdee" style="display:none;">
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Based on your profile using the Mifflin-St Jeor equation.</p>
+          <div class="tdee-grid">
+            <div class="tdee-box tdee-loss">
+              <div class="tdee-label">Weight Loss</div>
+              <div class="tdee-val" id="tdee-loss">—</div>
+              <div class="tdee-sub">kcal/day (−500)</div>
+              <button class="btn-tdee-set" onclick="setTDEEGoal('loss')">Set as Goal</button>
+            </div>
+            <div class="tdee-box tdee-maintain">
+              <div class="tdee-label">Maintain</div>
+              <div class="tdee-val" id="tdee-maintain">—</div>
+              <div class="tdee-sub">kcal/day (TDEE)</div>
+              <button class="btn-tdee-set" onclick="setTDEEGoal('maintain')">Set as Goal</button>
+            </div>
+            <div class="tdee-box tdee-gain">
+              <div class="tdee-label">Weight Gain</div>
+              <div class="tdee-val" id="tdee-gain">—</div>
+              <div class="tdee-sub">kcal/day (+500)</div>
+              <button class="btn-tdee-set" onclick="setTDEEGoal('gain')">Set as Goal</button>
+            </div>
+          </div>
+          <div class="tdee-current" id="tdee-current-goal"></div>
+        </div>
+      </section>
+
+      <section class="card" id="trends-card">
+        <div class="trends-header">
+          <h2>Trends &amp; Statistics</h2>
+          <div class="trends-controls">
+            <div class="trends-tab-row">
+              <div class="chart-period-tabs" id="chart-period-tabs">
+                <button class="period-tab active" data-period="daily">Daily</button>
+                <button class="period-tab" data-period="weekly">Weekly</button>
+                <button class="period-tab" data-period="monthly">Monthly</button>
+                <button class="period-tab" data-period="custom">Custom</button>
+              </div>
+              <button class="btn-chart-settings period-tab" onclick="openChartSettings()" title="Chart Settings">⚙</button>
+            </div>
+            <div id="chart-custom-range" style="display:none;" class="chart-custom-range">
+              <input type="date" id="chart-date-from" />
+              <span style="color:var(--text-dim);font-size:12px;">to</span>
+              <input type="date" id="chart-date-to" />
+              <button class="btn-chart-apply" onclick="applyCustomRange()">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-section" id="cs-calories">
+          <div class="chart-title">Calories Consumed (kcal)</div>
+          <div class="chart-wrap"><canvas id="chart-calories"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-macros">
+          <div class="chart-title-row">
+            <span class="chart-title">Macros</span>
+            <div class="macro-view-toggle" style="gap:6px;">
+              <button class="mvt-btn active" id="mvt-stack" onclick="setMacroView('stack')">Stacked</button>
+              <button class="mvt-btn" id="mvt-pie" onclick="setMacroView('pie')">Pie</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="macro-chart-wrap"><canvas id="chart-macros"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-burnt" style="display:none;">
+          <div class="chart-title-row">
+            <span class="chart-title">Calories Burnt</span>
+            <select class="chart-filter-select" id="burnt-filter" onchange="renderCharts()">
+              <option value="all">Steps + BMR + Exercise</option>
+              <option value="steps">Steps only</option>
+              <option value="bmr">BMR only</option>
+              <option value="exercise">Exercise only</option>
+              <option value="net">Net (Consumed − Burnt)</option>
+            </select>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-burnt"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-weight">
+          <div class="chart-title">Weight (kg)</div>
+          <div class="chart-wrap"><canvas id="chart-weight"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-water" style="display:none;">
+          <div class="chart-title">Water (ml)</div>
+          <p class="chart-rec" id="rec-water"></p>
+          <div class="chart-wrap"><canvas id="chart-water"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-steps" style="display:none;">
+          <div class="chart-title">Steps</div>
+          <div class="chart-wrap"><canvas id="chart-steps"></canvas></div>
+        </div>
+
+        <div class="chart-section" id="cs-sleep" style="display:none;">
+          <div class="chart-title">Sleep (hrs)</div>
+          <p class="chart-rec" id="rec-sleep"></p>
+          <div class="chart-wrap"><canvas id="chart-sleep"></canvas></div>
+        </div>
+
+      </section>
+
+      <section class="card">
+        <h2>Import / Export Data</h2>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:4px;">Export everything (profile, logs, library, cards) as a single JSON file. Import to restore.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;margin-top:14px;">
+          <button onclick="exportAllData()" style="flex:1;min-width:130px;">Export All Data</button>
+          <button class="btn-secondary" onclick="document.getElementById('json-import').click()" style="flex:1;min-width:130px;">Import JSON</button>
+          <input type="file" id="json-import" accept=".json" style="display:none;" onchange="importData(event)" />
+        </div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Export only your food library (saved foods) as a separate file.</p>
+        <button onclick="exportFoodLibrary()" class="btn-secondary" style="width:100%;margin-top:8px;">Export Food Library Only</button>
+        <div id="import-status" style="margin-top:12px;font-size:13px;color:var(--text-dim);"></div>
+      </section>
+
+      <section class="card">
+        <h2>Daily Log Cards</h2>
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Daily Extras</div>
+              <div class="toggle-desc">Water, steps, weight &amp; sleep tracker</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-extras" onchange="saveCardToggle('extras',this)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Exercise Tracker</div>
+              <div class="toggle-desc">Log workouts and track calories burned</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-exercise" onchange="saveCardToggle('exercise',this)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Fasting Tracker</div>
+              <div class="toggle-desc">Track fasting and eating windows with live timer.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-fasting" onchange="saveCardToggle('fasting',this)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Food Moderator</div>
+              <div class="toggle-desc">Set cooldown periods for food categories.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-foodmod" onchange="saveCardToggle('foodmod',this)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Appearance</h2>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Choose a color theme. All themes use white text on the accent color.</p>
+        <div class="theme-grid" id="theme-grid"></div>
+      </section>
+
+      <section class="card card-danger">
+        <h2>Danger Zone</h2>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">Permanently delete all your logged data, food library, and profile. This cannot be undone.</p>
+        <button class="btn-danger-full" onclick="deleteAllData()">Delete All Data</button>
+      </section>
+    </div>
+
+  </div></main>
+
+<div class="es" id="esOverlays"><div id="modal-overlay" class="hidden" onclick="closeModal(event)">
+    <div class="es-modal">
+      <h2>Edit Food</h2>
+      <input type="hidden" id="edit-index" />
+      <div class="form-grid">
+        <div class="es-field full"><label>Food Name</label><input type="text" id="edit-name" /></div>
+        <div class="es-field"><label>Serving Size (g)</label><input type="number" id="edit-grams" min="1" /></div>
+        <div class="es-field"><label>Calories (kcal)</label><input type="number" id="edit-calories" min="0" /></div>
+        <div class="es-field"><label>Protein (g)</label><input type="number" id="edit-protein" min="0" /></div>
+        <div class="es-field"><label>Carbs (g)</label><input type="number" id="edit-carbs" min="0" /></div>
+        <div class="es-field"><label>Fat (g)</label><input type="number" id="edit-fat" min="0" /></div>
+        <div class="es-field"><label>Fiber (g)</label><input type="number" id="edit-fiber" min="0" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModalDirect()">Cancel</button>
+        <button onclick="updateFood()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="log-modal-overlay" class="hidden" onclick="closeLogModal(event)">
+    <div class="es-modal">
+      <h2>Log a Meal</h2>
+      <input type="text" id="log-search" placeholder="Search foods..." oninput="renderLogFoodList(this.value)" style="margin-bottom:10px;" />
+      <div class="food-pick-list" id="food-pick-list"></div>
+      <div class="grams-row">
+        <label>Grams eaten</label>
+        <input type="number" id="log-grams" placeholder="e.g. 150" min="1" oninput="updateMacroPreview()" />
+      </div>
+      <div class="macro-preview" id="macro-preview">Pick a food to see scaled macros</div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeLogModalDirect()">Cancel</button>
+        <button onclick="confirmLogMeal()">Log Meal</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="edit-meal-overlay" class="hidden" onclick="closeEditMealModal(event)">
+    <div class="es-modal">
+      <h2>Edit Logged Meal</h2>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;">Changes only apply to this day's log. Your food library is not affected.</p>
+      <input type="hidden" id="edit-meal-index" />
+      
+      <div class="edit-mode-picker">
+        <button class="edit-mode-btn active" id="meal-mode-grams" onclick="setMealEditMode('grams')">
+          <span class="mode-label">Edit Grams Only</span>
+          <span class="mode-desc">Macros auto-scale from original library values</span>
+        </button>
+        <button class="edit-mode-btn" id="meal-mode-manual" onclick="setMealEditMode('manual')">
+          <span class="mode-label">Edit Individual Macros</span>
+          <span class="mode-desc">Manually set all values freely</span>
+        </button>
+      </div>
+      <div class="form-grid">
+        <div class="es-field full"><label>Food Name</label><input type="text" id="edit-meal-name" readonly style="opacity:0.6;cursor:not-allowed;" /></div>
+        <div class="es-field"><label>Grams</label><input type="number" id="edit-meal-grams" min="1" oninput="onMealGramsInput()" /></div>
+        <div class="es-field edit-field-readonly" id="meal-field-calories"><label>Calories (kcal)</label><input type="number" id="edit-meal-calories" min="0" /></div>
+        <div class="es-field edit-field-readonly" id="meal-field-protein"><label>Protein (g)</label><input type="number" id="edit-meal-protein" min="0" /></div>
+        <div class="es-field edit-field-readonly" id="meal-field-carbs"><label>Carbs (g)</label><input type="number" id="edit-meal-carbs" min="0" /></div>
+        <div class="es-field edit-field-readonly" id="meal-field-fat"><label>Fat (g)</label><input type="number" id="edit-meal-fat" min="0" /></div>
+        <div class="es-field edit-field-readonly" id="meal-field-fiber"><label>Fiber (g)</label><input type="number" id="edit-meal-fiber" min="0" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeEditMealModalDirect()">Cancel</button>
+        <button onclick="saveEditedMeal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cal-overlay" class="hidden" onclick="closeCalendar(event)">
+    <div class="cal-modal">
+      <div class="cal-header">
+        <button class="es-cal-nav" onclick="calPrevMonth()">‹</button>
+        <span id="cal-month-label"></span>
+        <button class="es-cal-nav" onclick="calNextMonth()">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div class="es-cal-grid" id="cal-grid"></div>
+      <div style="text-align:center;margin-top:14px;">
+        <button class="btn-secondary" onclick="closeCalendarDirect()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tutorial-overlay" class="hidden" onclick="closeTutorial(event)">
+    <div class="tutorial-modal">
+      <div class="tutorial-steps">
+        <div class="tutorial-step active" id="tut-step-0">
+          <h3>Food Library</h3>
+          <p>Log your meals and food calories, and optionally macros including protein, carbohydrates, fat, and even fiber.</p>
+          <p style="margin-top:10px;">Explore our Presets for common foods and Filipino dishes to quickly build your food library.</p>
+        </div>
+        <div class="tutorial-step" id="tut-step-1">
+          <h3>Daily Logger</h3>
+          <p>Log your daily meals, water intake, steps, sleep, and weight.</p>
+          <p style="margin-top:10px;">We know not all meals are built the same — when you add less meat or use different vegetable sizes, you can edit the grams, calories, and macros individually for each logged meal without affecting your food library.</p>
+        </div>
+        <div class="tutorial-step" id="tut-step-2">
+          <h3>Profile</h3>
+          <p>Enter your gender, height, and current weight to get calorie target suggestions for weight loss, gain, or maintenance. You can also set daily goals for your macros.</p>
+          <p style="margin-top:10px;">All data is stored locally on your device. Export or import your profile, food library, meal logs, and health cards as a JSON file to transfer or back up your data.</p>
+        </div>
+      </div>
+      <div class="tutorial-dots">
+        <span class="tut-dot active" onclick="goToStep(0)"></span>
+        <span class="tut-dot" onclick="goToStep(1)"></span>
+        <span class="tut-dot" onclick="goToStep(2)"></span>
+      </div>
+      <div class="tutorial-actions">
+        <button class="btn-secondary" id="tut-prev" onclick="tutNav(-1)" style="visibility:hidden;">Back</button>
+        <button id="tut-next" onclick="tutNav(1)">Next</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div id="add-ex-overlay" class="hidden" onclick="if(event.target===this)closeAddExModal()">
+    <div class="es-modal">
+      <h2>Add Exercise</h2>
+      <div class="ask-ai-row">
+        <button class="btn-ask-ai" onclick="openAskAI()">✦ Ask AI for Calories Burnt</button>
+      </div>
+
+      <div class="section-divider" style="margin-top:14px;">Saved Exercises</div>
+      <input type="text" id="ex-lib-search" placeholder="Search past exercises..." oninput="renderExLibPicker(this.value)" style="margin-bottom:10px;" />
+      <div class="ex-lib-picker" id="ex-lib-picker"></div>
+
+      <div class="section-divider" style="margin-top:14px;">Exercise Details</div>
+      <div class="form-grid" style="margin-top:10px;">
+        <div class="es-field full"><label>Exercise Name</label><input type="text" id="new-ex-name" placeholder="e.g. Pull-up" /></div>
+        <div class="es-field"><label>Reps</label><input type="number" id="new-ex-reps" placeholder="e.g. 10" min="1" /></div>
+        <div class="es-field"><label>Calories burnt per rep <span style="color:var(--danger);">*</span></label><input type="number" id="new-ex-cals-per-unit" placeholder="e.g. 0.5" min="0" step="0.01" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeAddExModal()">Close</button>
+        <button onclick="addCustomExercise()">Add Exercise</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="edit-ex-overlay" class="hidden" onclick="if(event.target===this)document.getElementById('edit-ex-overlay').classList.add('hidden')">
+    <div class="es-modal">
+      <h2>Edit Exercise</h2>
+      <div class="form-grid">
+        <div class="es-field full"><label>Name</label><input type="text" id="edit-ex-name" /></div>
+        <div class="es-field full"><label>Calories burnt per rep <span style="color:var(--danger);">*</span></label><input type="number" id="edit-ex-cals-per-unit" placeholder="e.g. 0.5" min="0" step="0.01" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-danger" onclick="deleteExercise()">Remove</button>
+        <button onclick="saveEditEx()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="foodcat-overlay" class="hidden" onclick="if(event.target===this)document.getElementById('foodcat-overlay').classList.add('hidden')">
+    <div class="es-modal">
+      <h2 id="foodcat-modal-title">Add Food Category</h2>
+      <div class="form-grid">
+        <div class="es-field full"><label>Category Name</label><input type="text" id="foodcat-name" placeholder="e.g. Canned Food" /></div>
+        <div class="es-field full"><label>Default Cooldown (days)</label><input type="number" id="foodcat-days" min="1" value="7" /></div>
+      </div>
+      <div class="section-divider" style="margin-top:14px;">Tag Foods from Library</div>
+      <p style="font-size:11px;color:var(--text-dim);margin:6px 0 8px;">Search and tap foods that belong to this category. Logging them will trigger the cooldown.</p>
+      <input type="text" id="foodcat-search" placeholder="Search foods..." oninput="renderFoodCatPickList(this.value)" style="margin-bottom:10px;" />
+      <div id="foodcat-selected-chips" class="foodcat-selected-chips"></div>
+      <div class="food-pick-list" id="foodcat-pick-list"></div>
+      <div class="modal-actions">
+        <button class="btn-danger" id="foodcat-delete-btn" onclick="deleteFoodCat()" style="display:none;">Delete</button>
+        <button class="btn-secondary" onclick="document.getElementById('foodcat-overlay').classList.add('hidden')">Cancel</button>
+        <button onclick="saveFoodCat()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="editcooldown-overlay" class="hidden" onclick="if(event.target===this)document.getElementById('editcooldown-overlay').classList.add('hidden')">
+    <div class="es-modal">
+      <h2>Edit Cooldown</h2>
+      <p id="editcooldown-cat-name" style="font-size:13px;color:var(--text-dim);margin-bottom:14px;"></p>
+
+      <div class="form-grid">
+        <div class="es-field full" style="flex-direction:row;align-items:flex-end;gap:8px;">
+          <div style="flex:1;">
+            <label>Default cooldown (days)</label>
+            <input type="number" id="editcooldown-default" min="1" />
+          </div>
+          <button class="btn-foodmod-action" style="flex-shrink:0;padding:9px 14px;" onclick="saveEditCooldownDefault()">Save</button>
+        </div>
+      </div>
+
+      <div class="section-divider" style="margin-top:14px;">Adjust Current Cooldown</div>
+      <p id="editcooldown-status" style="font-size:13px;color:var(--text-mid);margin:8px 0 12px;"></p>
+
+      <div class="cooldown-adjust-row">
+        <div class="cooldown-adjust-group">
+          <label class="rec-label">Set exact remaining days</label>
+          <div class="interval-row" style="flex-wrap:wrap;">
+            <input type="number" id="editcooldown-current" min="0" class="interval-input" style="width:70px;" />
+            <input type="number" id="editcooldown-add" min="1" value="1" class="interval-input" style="width:55px;" />
+            <button class="btn-foodmod-action" onclick="applyCooldownAdd()">+ Add</button>
+            <input type="number" id="editcooldown-reduce" min="1" value="1" class="interval-input" style="width:55px;" />
+            <button class="btn-foodmod-action" onclick="applyCooldownReduce()">− Reduce</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions" style="margin-top:18px;">
+        <button class="btn-secondary" onclick="clearOneCooldown()">Clear Cooldown</button>
+        <button onclick="applyCooldownExact()">Set</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fasting-settings-overlay" class="hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="es-modal">
+      <h2>Fasting Settings</h2>
+      <div class="fasting-presets" style="margin-bottom:14px;">
+        <button class="fast-preset-btn" data-preset="16:8" onclick="setFastingPreset('16:8')">16:8</button>
+        <button class="fast-preset-btn" data-preset="18:6" onclick="setFastingPreset('18:6')">18:6</button>
+        <button class="fast-preset-btn" data-preset="14:10" onclick="setFastingPreset('14:10')">14:10</button>
+        <button class="fast-preset-btn" data-preset="custom" onclick="setFastingPreset('custom')">Custom</button>
+      </div>
+      <div id="fasting-custom-row" class="fasting-custom-row" style="display:none;">
+        <div class="fasting-field">
+          <label>Fast (hrs)</label>
+          <input type="number" id="fast-hours" min="1" max="23" value="16" onchange="updateCustomFasting()" />
+        </div>
+        <div class="fasting-field">
+          <label>Eat (hrs)</label>
+          <input type="number" id="eat-hours" min="1" max="23" value="8" onchange="updateCustomFasting()" />
+        </div>
+      </div>
+      <div class="fasting-time-row" style="margin-top:12px;">
+        <label class="fasting-time-label">Fasting starts at</label>
+        <input type="time" id="fast-start-time" value="20:00" onchange="saveFastingStartTime()" />
+      </div>
+      <div class="modal-actions">
+        <button onclick="document.getElementById('fasting-settings-overlay').classList.add('hidden');renderFastingCard()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="foodmod-settings-overlay" class="hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="es-modal">
+      <h2>Cooldown Behaviour</h2>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">What happens when you eat a food while it's still in cooldown?</p>
+      <div class="form-grid">
+        <div class="es-field full">
+          <select id="foodmod-setting" onchange="saveCooldownSetting(this.value)">
+            <option value="reset">Reset to default cooldown</option>
+            <option value="extend">Extend by default cooldown days</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button onclick="document.getElementById('foodmod-settings-overlay').classList.add('hidden')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chart-settings-overlay" class="hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="es-modal">
+      <h2>Chart Settings</h2>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;">Choose which charts to display. Calories cannot be turned off.</p>
+      <div class="chart-settings-list" id="chart-settings-list">
+        <label class="chart-setting-row"><input type="checkbox" checked disabled /> <span>Calories Consumed</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-macros" onchange="saveChartSettings()" /> <span>Macros</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-burnt" onchange="saveChartSettings()" /> <span>Calories Burnt</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-weight" onchange="saveChartSettings()" /> <span>Weight</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-water" onchange="saveChartSettings()" /> <span>Water</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-steps" onchange="saveChartSettings()" /> <span>Steps</span></label>
+        <label class="chart-setting-row"><input type="checkbox" id="cs-toggle-sleep" onchange="saveChartSettings()" /> <span>Sleep</span></label>
+      </div>
+      <div class="modal-actions">
+        <button onclick="document.getElementById('chart-settings-overlay').classList.add('hidden')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="help-btn" id="esHelp" hidden aria-label="Help" onclick="openTutorial()">?</button></div>
